@@ -1,12 +1,20 @@
 import pygame, sys
 
 pygame.init()
-screen = pygame.display.set_mode((2432/3,2528/3))
+SCREEN_WIDTH = 2432/3
+SCREEN_HEIGHT = 2528/3
+screen = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
 clock = pygame.time.Clock()
 
 bg_surface = pygame.image.load('Assets/Digital_assessment_map_no-light.png').convert()
 #bg_surface = pygame.transform.scale2x(bg_surface)
 #bg_surface = pygame.transform.scale_by(bg_surface, 0.333)
+
+#game variables
+move_x = -130
+move_y = -1840
+rand_rect = pygame.Rect(SCREEN_WIDTH/2,SCREEN_HEIGHT/2,50,50)
+
 
 while True:
     for event in pygame.event.get():
@@ -14,13 +22,37 @@ while True:
             pygame.quit()
             sys.exit()
             
-           
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_d:
-                pass
-     
+                pass 
                 
-    screen.blit(bg_surface,(0,0)) 
+    keys = pygame.key.get_pressed()
+    
+    if keys[pygame.K_d]:
+        screen.fill(pygame.Color("black"))
+        screen.blit(bg_surface,(move_x,move_y))
+        move_x += -5
+        rand_rect.x += -5
+        
+    if keys[pygame.K_a]:
+        screen.fill(pygame.Color("black"))
+        screen.blit(bg_surface,(move_x,move_y))
+        move_x += 5
+        rand_rect.x += 5
+        
+    if keys[pygame.K_w]:
+        screen.fill(pygame.Color("black"))
+        screen.blit(bg_surface,(move_x,move_y))
+        move_y += 5
+        rand_rect.y += 5
+        
+    if keys[pygame.K_s]:
+        screen.fill(pygame.Color("black"))
+        screen.blit(bg_surface,(move_x,move_y))
+        move_y += -5
+        rand_rect.y += -5
+        
+    pygame.draw.rect(screen,pygame.Color("purple"),rand_rect) 
     pygame.display.update()
     clock.tick(120)
