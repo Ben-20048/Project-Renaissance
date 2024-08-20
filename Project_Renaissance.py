@@ -15,7 +15,7 @@ move_x = -130
 move_y = -1840
 rand_rect = pygame.Rect(SCREEN_WIDTH/2,SCREEN_HEIGHT/2,50,50)
 
-wall1 = pygame.Rect(70,600,10,270-375)
+wall1 = pygame.Rect(70,600,10,370-235)
 
 #wall_list = [wall1]
 
@@ -40,24 +40,28 @@ while True:
         screen.blit(bg_surface,(move_x,move_y))
         move_x += -5
         rand_rect.x += -5
+        wall1.x += -5
         
     if keys[pygame.K_a]:
         screen.fill(pygame.Color("black"))
         screen.blit(bg_surface,(move_x,move_y))
         move_x += 5
         rand_rect.x += 5
+        wall1.x += 5
         
     if keys[pygame.K_w]:
         screen.fill(pygame.Color("black"))
         screen.blit(bg_surface,(move_x,move_y))
         move_y += 5
         rand_rect.y += 5
+        wall1.y += 5
         
     if keys[pygame.K_s]:
         screen.fill(pygame.Color("black"))
         screen.blit(bg_surface,(move_x,move_y))
         move_y += -5
         rand_rect.y += -5
+        wall1.y += -5
         
     if event.type == pygame.MOUSEBUTTONDOWN:
         print(pygame.mouse.get_pos())
