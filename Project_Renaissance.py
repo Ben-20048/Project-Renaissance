@@ -15,6 +15,12 @@ move_x = -130
 move_y = -1840
 rand_rect = pygame.Rect(SCREEN_WIDTH/2,SCREEN_HEIGHT/2,50,50)
 
+wall1 = pygame.Rect(70,600,10,270-375)
+
+#wall_list = [wall1]
+
+
+
 
 while True:
     for event in pygame.event.get():
@@ -53,6 +59,10 @@ while True:
         move_y += -5
         rand_rect.y += -5
         
+    if event.type == pygame.MOUSEBUTTONDOWN:
+        print(pygame.mouse.get_pos())
+        
     pygame.draw.rect(screen,pygame.Color("purple"),rand_rect) 
+    pygame.draw.rect(screen,pygame.Color("yellow"),wall1)
     pygame.display.update()
     clock.tick(120)
