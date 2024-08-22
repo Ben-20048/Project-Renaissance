@@ -1,5 +1,11 @@
 import pygame, sys
 
+def check_collision():
+    if char_rect.colliderect(wall1):
+        print("collision")
+        move_x = 0
+        move_y = 0
+
 pygame.init()
 SCREEN_WIDTH = 2432/3
 SCREEN_HEIGHT = 2528/3
@@ -15,9 +21,12 @@ move_x = -130
 move_y = -1840
 rand_rect = pygame.Rect(SCREEN_WIDTH/2,SCREEN_HEIGHT/2,50,50)
 
-wall1 = pygame.Rect(70,600,10,370-235)
+char_rect = pygame.Rect(SCREEN_WIDTH/2,SCREEN_HEIGHT/2,50,50)
 
-#wall_list = [wall1]
+#wall data
+wall1 = pygame.Rect(591,508,1000,370-235)
+
+wall_list = [wall1]
 
 
 
@@ -44,21 +53,21 @@ while True:
         
     if keys[pygame.K_a]:
         screen.fill(pygame.Color("black"))
-        screen.blit(bg_surface,(move_x,move_y))
+        screen.blit(bg_surface,(move_x + 10,move_y))
         move_x += 5
         rand_rect.x += 5
         wall1.x += 5
         
     if keys[pygame.K_w]:
         screen.fill(pygame.Color("black"))
-        screen.blit(bg_surface,(move_x,move_y))
+        screen.blit(bg_surface,(move_x + 5,move_y + 5))
         move_y += 5
         rand_rect.y += 5
         wall1.y += 5
         
     if keys[pygame.K_s]:
         screen.fill(pygame.Color("black"))
-        screen.blit(bg_surface,(move_x,move_y))
+        screen.blit(bg_surface,(move_x + 5,move_y - 5))
         move_y += -5
         rand_rect.y += -5
         wall1.y += -5
@@ -66,7 +75,10 @@ while True:
     if event.type == pygame.MOUSEBUTTONDOWN:
         print(pygame.mouse.get_pos())
         
+    check_collision()
+        
     pygame.draw.rect(screen,pygame.Color("purple"),rand_rect) 
     pygame.draw.rect(screen,pygame.Color("yellow"),wall1)
+    pygame.draw.rect(screen,pygame.Color("blue"),char_rect)
     pygame.display.update()
     clock.tick(120)
