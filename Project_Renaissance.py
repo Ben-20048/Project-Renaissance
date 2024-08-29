@@ -16,7 +16,7 @@ bg_surface = pygame.image.load('Assets/Digital_assessment_map_no-light.png').con
 move_x = -130
 move_y = -1840
 
-move_right = -5
+moving_right = -5
 moving_left = 5
 moving_up = 5
 moving_down = -5
@@ -46,35 +46,35 @@ while True:
     if keys[pygame.K_d]:
         screen.fill(pygame.Color("black"))
         screen.blit(bg_surface,(move_x,move_y))
-        move_x += move_right
-        rand_rect.x += move_right
+        move_x += moving_right
+        rand_rect.x += moving_right
         for wall in wall_list:
-            wall.x += move_right
+            wall.x += moving_right
                 
 
     if keys[pygame.K_a]:
         screen.fill(pygame.Color("black"))
         screen.blit(bg_surface,(move_x + 10,move_y))
-        move_x += 5
-        rand_rect.x += 5
+        move_x += moving_left
+        rand_rect.x += moving_left
         for wall in wall_list:
-            wall.x += 5
+            wall.x += moving_left
         
     if keys[pygame.K_w]:
         screen.fill(pygame.Color("black"))
         screen.blit(bg_surface,(move_x + 5,move_y + 5))
-        move_y += 5
-        rand_rect.y += 5
+        move_y += moving_up
+        rand_rect.y += moving_up
         for wall in wall_list:
-            wall.y += 5
+            wall.y += moving_up
         
     if keys[pygame.K_s]:
         screen.fill(pygame.Color("black"))
         screen.blit(bg_surface,(move_x + 5,move_y - 5))
-        move_y += -5
-        rand_rect.y += -5
+        move_y += moving_down
+        rand_rect.y += moving_down
         for wall in wall_list:
-            wall.y += -5
+            wall.y += moving_down
             
 
     for wall in wall_list:
@@ -83,16 +83,48 @@ while True:
             print ("collision")
 
             if char_rect.right - wall.left <=20:
-                print("collision right")
-                print (char_rect.bottom)
-                print (wall.top)
-                move_right = 0
+                #print("collision right")
+                #print (char_rect.bottom)
+                #print (wall.top)
+                moving_right = 0
                 if char_rect.right - wall.left <=10:
-                    print("uncollided right")
-                    move_right = -5
+                    #print("uncollided right")
+                    moving_right = -5
+                    
+            if char_rect.left - wall.right >=-20:
+                #print("collision left")
+                #print(char_rect.left)
+                #print(wall.right)
+                moving_left = 0
+                if char_rect.left - wall.right >=-10:
+                    #print("uncollided left")
+                    moving_left = 5
+                    
+            if char_rect.bottom - wall.top <=20:
+                #print("collision bottom")
+                moving_down = 0
+                if char_rect.bottom - wall.top <=10:
+                    #print("uncollided bottom")
+                    moving_down = -5
+                    
+            if char_rect.top - wall.bottom >=-20:
+                #print("collision top")
+                moving_up = 0
+                if char_rect.top - wall.bottom >=-10:
+                    #print("uncollided top")
+                    moving_up = 5
+
         if char_rect.bottom - wall.top <= -1:
-            print("slide col exe")
-            move_right = -5
+            #print("slide col exe")
+            moving_right = -5
+            moving_left = 5
+            
+        #if char_rect.top < wall.bottom:
+            #print("slide col exe 2")
+            #print(char_rect.top)
+            #print(wall.bottom)
+            #moving_right = -5
+            #moving_left = 5
                     
         
     if event.type == pygame.MOUSEBUTTONDOWN:
