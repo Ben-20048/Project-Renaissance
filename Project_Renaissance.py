@@ -84,12 +84,15 @@ while True:
 
             if char_rect.right - wall.left <=20:
                 print("collision right")
-                print (char_rect.right)
-                print (wall.left)
+                print (char_rect.bottom)
+                print (wall.top)
                 move_right = 0
                 if char_rect.right - wall.left <=10:
                     print("uncollided right")
                     move_right = -5
+        if char_rect.bottom - wall.top <= -1:
+            print("slide col exe")
+            move_right = -5
                     
         
     if event.type == pygame.MOUSEBUTTONDOWN:
