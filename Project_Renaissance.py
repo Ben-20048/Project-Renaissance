@@ -54,21 +54,34 @@ while True:
 
         if char_rect.colliderect(wall):
             print ("collision")
-            if char_rect.right - wall.left <= 10:
+            if char_rect.right - wall.left >= 10:
                 print("collision right")
                 #bg_surface(move_x + 5)
+                #move_x =
                 move_x += 0
                 #rand_rect.x += 5
                 #char_rect.right = wall.left
                 movement_speed = -5
                 #move_right = False
+                
             
-        #if abs(char_rect.left - wall.right) <=-10:
-            #print("collision right")
-            #print(coll)
-            #char_rect.right = wall.left
-            #movement_speed = 0
-            #move_left = False
+            if char_rect.left - wall.right >= 10:
+                print("collision left")
+                move_x = + 10
+                move_x += 0
+                movement_speed = 0
+                
+            if char_rect.top - wall.bottom >= 10:
+                print("collision left")
+                move_y = + 5
+                move_y += 0
+                movement_speed = 0
+                
+            if char_rect.bottom - wall.top >= 10:
+                print("collision left")
+                move_y = + 5
+                move_y += 0
+                movement_speed = 0
                 
                 
     if keys[pygame.K_d] and move_right:
@@ -82,7 +95,7 @@ while True:
 
     if keys[pygame.K_a] and move_left:
         screen.fill(pygame.Color("black"))
-        screen.blit(bg_surface,(move_x + 10,move_y))
+        screen.blit(bg_surface,(move_x + 10 ,move_y))
         move_x += movement_speed
         rand_rect.x += movement_speed
         for wall in wall_list:
