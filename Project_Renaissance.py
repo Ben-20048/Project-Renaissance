@@ -2,7 +2,6 @@ from operator import index
 import pygame, sys
 
 
-
 pygame.init()
 SCREEN_WIDTH = 2432/3
 SCREEN_HEIGHT = 2528/3
@@ -16,6 +15,11 @@ bg_surface = pygame.image.load('Assets/Digital_assessment_map_no-light.png').con
 #game variables
 move_x = -130
 move_y = -1840
+
+move_right = -5
+moving_left = 5
+moving_up = 5
+moving_down = -5
 
 rand_rect = pygame.Rect(SCREEN_WIDTH/2,SCREEN_HEIGHT/2,50,50)
 
@@ -42,10 +46,10 @@ while True:
     if keys[pygame.K_d]:
         screen.fill(pygame.Color("black"))
         screen.blit(bg_surface,(move_x,move_y))
-        move_x += -5
-        rand_rect.x += -5
+        move_x += move_right
+        rand_rect.x += move_right
         for wall in wall_list:
-            wall.x += -5
+            wall.x += move_right
                 
 
     if keys[pygame.K_a]:
@@ -78,13 +82,14 @@ while True:
         if char_rect.colliderect(wall):
             print ("collision")
 
-            if abs(char_rect.right - wall.left) <=10:
+            if char_rect.right - wall.left <=20:
                 print("collision right")
-                bg_surface, (move_x - 5)
-                move_x += 5
-                rand_rect.x += 5
-                for wall in wall_list:
-                    new_wall_list.append(wall+1)
+                print (char_rect.right)
+                print (wall.left)
+                move_right = 0
+                if char_rect.right - wall.left <=10:
+                    print("uncollided right")
+                    move_right = -5
                     
         
     if event.type == pygame.MOUSEBUTTONDOWN:
