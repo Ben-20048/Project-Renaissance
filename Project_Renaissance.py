@@ -30,8 +30,7 @@ wall2 = pygame.Rect(591,508,1000,370-235)
 wall1 = pygame.Rect(591,380,620,10-0)
 wall3 = pygame.Rect(591, 100, 620, 5)
 
-wall_list = [wall1,wall2, wall3]
-new_wall_list = []
+wall_list = [wall1, wall2, wall3]
 
 color = pygame.Color("yellow")
 
@@ -82,6 +81,7 @@ while True:
             
 
     for wall in wall_list:
+        
         if char_rect.colliderect(wall):
             collision_detected = True
             print ("collision with " + str(wall))
@@ -92,6 +92,7 @@ while True:
                 print (wall.left)
                 print(char_rect.right - wall.left)
                 moving_right = 0
+                print (moving_right)
                 if char_rect.right - wall.left <=10:
                     print("uncollided right")
                     moving_right = -5
@@ -119,21 +120,21 @@ while True:
                     #print("uncollided top")
                     moving_up = 5
                     
-        #else:
-            #moving_right = -5
-            #moving_left = 5
-            #moving_up = 5
-            #moving_down = -5
+        else:
+            moving_right = -5
+            moving_left = 5
+            moving_up = 5
+            moving_down = -5
                     
-    if not collision_detected:
+    #if not collision_detected:
         #print("slide col exe 2")
         #print("char rect top: " + str(char_rect.top))
         #print("wall bottom: " + str(wall.bottom))
         #print("moving right: " + str(moving_right) + "          moving left: " + str(moving_left))
-        moving_right = -5
-        moving_left = 5
-        moving_up = 5
-        moving_down = -5
+        #moving_right = -5
+        #oving_left = 5
+        #moving_up = 5
+        #moving_down = -5
 
         #if char_rect.bottom - wall.top <= -1:
             #print("slide col exe")
