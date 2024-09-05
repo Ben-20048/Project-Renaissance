@@ -1,5 +1,6 @@
 from operator import index
 import pygame, sys
+#from pygame.locals import *
 
 
 pygame.init()
@@ -42,6 +43,8 @@ image_index = 0
 
 ANIMATION = pygame.USEREVENT
 
+pygame.time.set_timer(ANIMATION, 100)
+
 #wall data
 wall1 = pygame.Rect(1591,380,620,10-0)
 wall2 = pygame.Rect(1591,508,1000,370-235)
@@ -61,7 +64,48 @@ while True:
             sys.exit()
         if event.type == pygame.MOUSEBUTTONDOWN:
             print(pygame.mouse.get_pos())
-                      
+        
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_d or pygame.K_a or pygame.K_w or pygame.K_s:
+                image_index = image_index
+    
+        if event.type == ANIMATION:
+            print ("anim")
+            if moving_right == -5:
+                if image_index < len(char_walk)-1:
+                    image_index += 1
+                    #current_sprite = char_walk[image_index]
+                else:
+                    image_index = 0
+
+            elif moving_left == 5:
+                if image_index < len(char_walk)-1:
+                    image_index += 1
+                    #current_sprite = pygame.transform.flip(image_sprite[image_index], True, False)
+                else:
+                    image_index = 0
+            
+            elif moving_down == -5:
+                if image_index < len(char_walk)-1:
+                    image_index += 1
+                    #current_sprite = pygame.transform.flip(image_sprite[image_index], True, False)
+                else:
+                    image_index = 0
+
+            elif moving_up == 5:
+                if image_index < len(char_walk)-1:
+                    image_index += 1
+                    #current_sprite = char_walk[image_index]
+                else:
+                    image_index = 0
+
+            else:
+                if image_index < len(char_idle)-1:
+                    image_index += 1
+                    #current_sprite = char_idle[image_index]
+                else:
+                    image_index = 0
+
     keys = pygame.key.get_pressed()
 
     if keys[pygame.K_d]:
@@ -69,16 +113,16 @@ while True:
         screen.blit(bg_surface,(move_x,move_y))
         move_x += moving_right
         rand_rect.x += moving_right
+        current_sprite = char_walk[image_index]
         for wall in wall_list:
             wall.x += moving_right
                 
-
     if keys[pygame.K_a]:
         screen.fill(pygame.Color("black"))
         screen.blit(bg_surface,(move_x + 10,move_y))
         move_x += moving_left
         rand_rect.x += moving_left
-        
+        current_sprite = pygame.transform.flip(image_sprite[image_index], True, False)
         for wall in wall_list:
             wall.x += moving_left
         
@@ -87,6 +131,7 @@ while True:
         screen.blit(bg_surface,(move_x + 5,move_y + 5))
         move_y += moving_up
         rand_rect.y += moving_up
+        current_sprite = char_walk[image_index]
         for wall in wall_list:
             wall.y += moving_up
         
@@ -95,11 +140,12 @@ while True:
         screen.blit(bg_surface,(move_x + 5,move_y - 5))
         move_y += moving_down
         rand_rect.y += moving_down
+        current_sprite = pygame.transform.flip(image_sprite[image_index], True, False)
         for wall in wall_list:
             wall.y += moving_down
             
     #screen.Surface(char_idle,(move_x,move_y))
-            
+    
     collision_detected = False
 
     for wall in wall_list:
@@ -141,6 +187,7 @@ while True:
 
         
     pygame.draw.rect(screen,pygame.Color("purple"),rand_rect) 
+    screen.blit(current_sprite, (0,0))
     #pygame.draw.rect(screen,pygame.Color("yellow"),wall1)
     #pygame.draw.rect(screen,pygame.Color("blue"),char_rect)
     pygame.display.update()
