@@ -3,18 +3,18 @@ import pygame, sys
 
 
 pygame.init()
-SCREEN_WIDTH = 2432/3
-SCREEN_HEIGHT = 2528/3
+SCREEN_WIDTH = 1930
+SCREEN_HEIGHT = 1000
 screen = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
 clock = pygame.time.Clock()
 
 bg_surface = pygame.image.load('Assets/Digital_assessment_map_no-light.png').convert()
-#bg_surface = pygame.transform.scale2x(bg_surface)
+bg_surface = pygame.transform.scale2x(bg_surface)
 #bg_surface = pygame.transform.scale_by(bg_surface, 0.333)
 
 #game variables
 move_x = -130
-move_y = -1840
+move_y = -4000
 
 moving_right = -5
 moving_left = 5
@@ -23,16 +23,34 @@ moving_down = -5
 
 rand_rect = pygame.Rect(SCREEN_WIDTH/2,SCREEN_HEIGHT/2,50,50)
 
-char_rect = pygame.Rect(SCREEN_WIDTH/2,SCREEN_HEIGHT/2,50,50)
+char_rect = pygame.Rect(SCREEN_WIDTH/2-50,SCREEN_HEIGHT/2-50,100,100)
+
+#animation stuff
+char_walk = [pygame.image.load("Assets/CharAnim/walk1.png"),
+             pygame.image.load("Assets/CharAnim/walk2.png"),
+             pygame.image.load("Assets/CharAnim/walk3.png"),
+             pygame.image.load("Assets/CharAnim/walk4.png"),
+             pygame.image.load("Assets/CharAnim/walk5.png"),
+             pygame.image.load("Assets/CharAnim/walk6.png")]
+
+char_idle = [pygame.image.load("Assets/CharAnim/Idle/idle1.png"),
+             pygame.image.load("Assets/CharAnim/Idle/idle2.png"),
+             pygame.image.load("Assets/CharAnim/Idle/idle3.png"),
+             pygame.image.load("Assets/CharAnim/Idle/idle4.png")]
+
+image_index = 0
+
+ANIMATION = pygame.USEREVENT
 
 #wall data
-wall1 = pygame.Rect(591,380,620,10-0)
-wall2 = pygame.Rect(591,508,1000,370-235)
-wall3 = pygame.Rect(591, 100, 620, 5)
+wall1 = pygame.Rect(1591,380,620,10-0)
+wall2 = pygame.Rect(1591,508,1000,370-235)
+wall3 = pygame.Rect(1591, 100, 620, 5)
 
 wall_list = [wall1, wall2, wall3]
 
 color = pygame.Color("yellow")
+
 
 collision_detected = False
 
@@ -60,6 +78,7 @@ while True:
         screen.blit(bg_surface,(move_x + 10,move_y))
         move_x += moving_left
         rand_rect.x += moving_left
+        
         for wall in wall_list:
             wall.x += moving_left
         
@@ -78,6 +97,8 @@ while True:
         rand_rect.y += moving_down
         for wall in wall_list:
             wall.y += moving_down
+            
+    #screen.Surface(char_idle,(move_x,move_y))
             
     collision_detected = False
 
@@ -112,8 +133,7 @@ while True:
             moving_right = -5
             moving_left = 5
             moving_up = 5
-            moving_down = -5
-                    
+            moving_down = -5            
 
     for wall in wall_list:
         pygame.draw.rect(screen, color, wall)
@@ -122,6 +142,6 @@ while True:
         
     pygame.draw.rect(screen,pygame.Color("purple"),rand_rect) 
     #pygame.draw.rect(screen,pygame.Color("yellow"),wall1)
-    pygame.draw.rect(screen,pygame.Color("blue"),char_rect)
+    #pygame.draw.rect(screen,pygame.Color("blue"),char_rect)
     pygame.display.update()
     clock.tick(120)
