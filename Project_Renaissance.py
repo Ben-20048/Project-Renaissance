@@ -22,6 +22,9 @@ moving_left = 5
 moving_up = 5
 moving_down = -5
 
+speed_down_right = -5
+speed_up_left = 5
+
 rand_rect = pygame.Rect(SCREEN_WIDTH/2,SCREEN_HEIGHT/2,50,50)
 
 char_rect = pygame.Rect(SCREEN_WIDTH/2-50,SCREEN_HEIGHT/2-50,100,100)
@@ -40,6 +43,7 @@ char_idle = [pygame.image.load("Assets/CharAnim/Idle/idle1.png"),
              pygame.image.load("Assets/CharAnim/Idle/idle4.png")]
 
 image_index = 0
+current_sprite = char_idle[image_index]
 
 ANIMATION = pygame.USEREVENT
 
@@ -47,7 +51,7 @@ pygame.time.set_timer(ANIMATION, 100)
 
 #wall data
 wall1 = pygame.Rect(1591,380,620,10-0)
-wall2 = pygame.Rect(1591,508,1000,370-235)
+wall2 = pygame.Rect(1305,695,1810,450-235)
 wall3 = pygame.Rect(1591, 100, 620, 5)
 
 wall_list = [wall1, wall2, wall3]
@@ -64,85 +68,90 @@ while True:
             sys.exit()
         if event.type == pygame.MOUSEBUTTONDOWN:
             print(pygame.mouse.get_pos())
-        
-        if event.type == pygame.KEYUP:
-            if event.key == pygame.K_d or pygame.K_a or pygame.K_w or pygame.K_s:
-                image_index = image_index
+            print("base run")
     
         if event.type == ANIMATION:
             print ("anim")
-            if moving_right == -5:
+            if moving_right == speed_down_right:
                 if image_index < len(char_walk)-1:
                     image_index += 1
                     #current_sprite = char_walk[image_index]
                 else:
                     image_index = 0
 
-            elif moving_left == 5:
+            elif moving_left == speed_up_left:
                 if image_index < len(char_walk)-1:
                     image_index += 1
                     #current_sprite = pygame.transform.flip(image_sprite[image_index], True, False)
                 else:
                     image_index = 0
             
-            elif moving_down == -5:
+            elif moving_down == speed_down_right:
                 if image_index < len(char_walk)-1:
                     image_index += 1
                     #current_sprite = pygame.transform.flip(image_sprite[image_index], True, False)
                 else:
                     image_index = 0
 
-            elif moving_up == 5:
+            elif moving_up == speed_up_left:
                 if image_index < len(char_walk)-1:
                     image_index += 1
                     #current_sprite = char_walk[image_index]
                 else:
                     image_index = 0
 
-            else:
+                #if event.type == pygame.KEYUP:
+                    #if event.key == pygame.K_d or pygame.K_a or pygame.K_w or pygame.K_s:
+                        ##image_index += 1
+
+            if image_index == 0:
+                print("anim rest")
                 if image_index < len(char_idle)-1:
+                    print("rest cycle")
+                    current_sprite = char_idle[image_index]
                     image_index += 1
-                    #current_sprite = char_idle[image_index]
-                else:
-                    image_index = 0
 
     keys = pygame.key.get_pressed()
 
     if keys[pygame.K_d]:
         screen.fill(pygame.Color("black"))
         screen.blit(bg_surface,(move_x,move_y))
-        move_x += moving_right
-        rand_rect.x += moving_right
+        move_x += moving_right+2
+        rand_rect.x += moving_right+2
         current_sprite = char_walk[image_index]
         for wall in wall_list:
-            wall.x += moving_right
+            wall.x += moving_right+2
                 
     if keys[pygame.K_a]:
         screen.fill(pygame.Color("black"))
         screen.blit(bg_surface,(move_x + 10,move_y))
-        move_x += moving_left
-        rand_rect.x += moving_left
-        current_sprite = pygame.transform.flip(image_sprite[image_index], True, False)
+        move_x += moving_left-2
+        rand_rect.x += moving_left-2
+        current_sprite = pygame.transform.flip(char_walk[image_index], True, False)
         for wall in wall_list:
-            wall.x += moving_left
+            wall.x += moving_left-2
         
     if keys[pygame.K_w]:
         screen.fill(pygame.Color("black"))
         screen.blit(bg_surface,(move_x + 5,move_y + 5))
-        move_y += moving_up
-        rand_rect.y += moving_up
+        move_y += moving_up-2
+        rand_rect.y += moving_up-2
         current_sprite = char_walk[image_index]
         for wall in wall_list:
-            wall.y += moving_up
+            wall.y += moving_up-2
         
     if keys[pygame.K_s]:
         screen.fill(pygame.Color("black"))
         screen.blit(bg_surface,(move_x + 5,move_y - 5))
-        move_y += moving_down
-        rand_rect.y += moving_down
-        current_sprite = pygame.transform.flip(image_sprite[image_index], True, False)
+        move_y += moving_down+2
+        rand_rect.y += moving_down+2
+        current_sprite = pygame.transform.flip(char_walk[image_index], True, False)
         for wall in wall_list:
-            wall.y += moving_down
+            wall.y += moving_down+2
+            
+    #if event.type == pygame.KEYUP:
+        #if event.key == pygame.K_d or pygame.K_a or pygame.K_w or pygame.K_s:
+            #current_sprite = char_idle[image_index]
             
     #screen.Surface(char_idle,(move_x,move_y))
     
@@ -183,11 +192,11 @@ while True:
 
     for wall in wall_list:
         pygame.draw.rect(screen, color, wall)
-        
-
+            
         
     pygame.draw.rect(screen,pygame.Color("purple"),rand_rect) 
-    screen.blit(current_sprite, (0,0))
+    scaled_c_sprite = pygame.transform.scale_by(current_sprite, 3)
+    screen.blit(scaled_c_sprite, (SCREEN_WIDTH/2,SCREEN_HEIGHT/2))
     #pygame.draw.rect(screen,pygame.Color("yellow"),wall1)
     #pygame.draw.rect(screen,pygame.Color("blue"),char_rect)
     pygame.display.update()
