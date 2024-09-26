@@ -104,12 +104,17 @@ while True:
                     #if event.key == pygame.K_d or pygame.K_a or pygame.K_w or pygame.K_s:
                         ##image_index += 1
 
-            if image_index == 0:
+
+            elif (keys[pygame.K_w] and keys[pygame.K_s] and keys[pygame.K_a] and keys[pygame.K_d]) == False:
+                print("no keys")
+                current_sprite = char_idle[image_index]
                 print("anim rest")
                 if image_index < len(char_idle)-1:
                     print("rest cycle")
                     current_sprite = char_idle[image_index]
                     image_index += 1
+                else:
+                    image_index = 0
 
     keys = pygame.key.get_pressed()
 
@@ -149,9 +154,9 @@ while True:
         for wall in wall_list:
             wall.y += moving_down+2
             
-    #if event.type == pygame.KEYUP:
-        #if event.key == pygame.K_d or pygame.K_a or pygame.K_w or pygame.K_s:
-            #current_sprite = char_idle[image_index]
+    #if (keys[pygame.K_w] and keys[pygame.K_s] and keys[pygame.K_a] and keys[pygame.K_d]) == False:
+        #print("no keys")
+        #current_sprite = char_idle[image_index]
             
     #screen.Surface(char_idle,(move_x,move_y))
     
