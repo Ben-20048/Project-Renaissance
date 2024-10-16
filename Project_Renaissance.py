@@ -9,13 +9,16 @@ SCREEN_HEIGHT = 1000
 screen = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
 clock = pygame.time.Clock()
 
-bg_surface = pygame.image.load('Assets/Digital_assessment_map_no-light.png').convert()
+bg_surface = pygame.image.load('Assets/Nuclear_reactor_meltdown_map_lighton.png').convert()
 bg_surface = pygame.transform.scale2x(bg_surface)
 #bg_surface = pygame.transform.scale_by(bg_surface, 0.333)
 
 #game variables
-move_x = -130
-move_y = -4000
+move_x = -1000
+move_y = -1100
+move_x_pr = move_x
+move_y_pr = move_y
+
 
 moving_right = -5
 moving_left = 5
@@ -27,7 +30,7 @@ speed_up_left = 5
 
 rand_rect = pygame.Rect(SCREEN_WIDTH/2,SCREEN_HEIGHT/2,50,50)
 
-char_rect = pygame.Rect(SCREEN_WIDTH/2-50,SCREEN_HEIGHT/2-50,100,100)
+char_rect = pygame.Rect(SCREEN_WIDTH/2+5,SCREEN_HEIGHT/2+7,50,50)
 
 #animation stuff
 char_walk = [pygame.image.load("Assets/CharAnim/walk1.png"),
@@ -49,12 +52,16 @@ ANIMATION = pygame.USEREVENT
 
 pygame.time.set_timer(ANIMATION, 100)
 
-#wall data
-wall1 = pygame.Rect(1591,380,620,10-0)
-wall2 = pygame.Rect(1305,695,1810,450-235)
-wall3 = pygame.Rect(1591, 100, 620, 5)
+#when taking coords from image editor take away 408 from X value and 480 from Y to get game coords
 
-wall_list = [wall1, wall2, wall3]
+#wall data
+wall1 = pygame.Rect(180,140,660,270-0)
+wall2 = pygame.Rect(1140,140,660,270-0)
+wall3 = pygame.Rect(245, 1035, 335, 270-0)
+wall4 = pygame.Rect(1396,1035,335,270-0)
+wall5 = pygame.Rect(1075, 1288, 350, 20-0)
+
+wall_list = [wall1, wall2, wall3, wall4, wall5]
 
 color = pygame.Color("yellow")
 
@@ -68,10 +75,12 @@ while True:
             sys.exit()
         if event.type == pygame.MOUSEBUTTONDOWN:
             print(pygame.mouse.get_pos())
-            print("base run")
+            print(move_x+1000)
+            print(move_y+1100)
+            #print("base run")
     
         if event.type == ANIMATION:
-            print ("anim")
+            #print ("anim")
             if moving_right == speed_down_right:
                 if image_index < len(char_walk)-1:
                     image_index += 1
@@ -104,19 +113,46 @@ while True:
                     #if event.key == pygame.K_d or pygame.K_a or pygame.K_w or pygame.K_s:
                         ##image_index += 1
 
+                #keys = pygame.key.get_pressed()
 
-            elif (keys[pygame.K_w] and keys[pygame.K_s] and keys[pygame.K_a] and keys[pygame.K_d]) == False:
-                print("no keys")
-                current_sprite = char_idle[image_index]
-                print("anim rest")
+            #if (keys[pygame.K_w] or keys[pygame.K_s] or keys[pygame.K_a] or keys[pygame.K_d]) == False:
+                #print("no keys")
+                #for i in range(len(char_idle)):
+                    #if i == 1:
+                        #current_sprite = char_idle[image_index]
+                        #print("anim rest")
+                        #if image_index < len(char_idle)-1:
+                           # print("rest cycle")
+                            #current_sprite = char_idle[image_index]
+                            #image_index += 1
+                        #else:
+                            #image_index = 0
+                            
+            if (keys[pygame.K_w] or keys[pygame.K_s] or keys[pygame.K_a] or keys[pygame.K_d]) == False:
+                #print("no keys")
+    
+                # Safeguard: Ensure `image_index` stays within bounds
+                #if len(char_idle) >= 0:
+                    #current_sprite = char_idle[image_index]
+                    #print("anim rest")
+        
                 if image_index < len(char_idle)-1:
-                    print("rest cycle")
                     current_sprite = char_idle[image_index]
+                    #print("rest cycle")
                     image_index += 1
+                    #print(image_index)
                 else:
+                    #print("reset idle")
                     image_index = 0
+            else:
+                print("Error: char_idle list is empty")
 
     keys = pygame.key.get_pressed()
+
+    #print(keys[pygame.K_d])
+    #print(keys[pygame.K_w])
+    #print(keys[pygame.K_s])
+    #print(keys[pygame.K_a])
 
     if keys[pygame.K_d]:
         screen.fill(pygame.Color("black"))
@@ -203,6 +239,6 @@ while True:
     scaled_c_sprite = pygame.transform.scale_by(current_sprite, 3)
     screen.blit(scaled_c_sprite, (SCREEN_WIDTH/2,SCREEN_HEIGHT/2))
     #pygame.draw.rect(screen,pygame.Color("yellow"),wall1)
-    #pygame.draw.rect(screen,pygame.Color("blue"),char_rect)
+    pygame.draw.rect(screen,pygame.Color("blue"),char_rect)
     pygame.display.update()
     clock.tick(120)
