@@ -43,6 +43,40 @@ wall7 = pygame.Rect(1842,907,250,20-0)
 
 wall_list = [wall1, wall2, wall3, wall4, wall5, wall6, wall7]
 
+#inventory
+def grabbable():
+    key1
+    key2
+    key3
+    key4
+    key5
+    key6
+
+def inventory():
+    inventory_list = []
+    if char_rect.colliderect(grabbable):
+        inventory_list.append()
+
+#keys
+#key1 = pygame.Rect()
+#key2 = pygame.Rect()
+#key3 = pygame.Rect()
+#key4 = pygame.Rect()
+#key5 = pygame.Rect()
+#key6 = pygame.Rect()
+    
+#def keys():
+    #key_list = [key1,key2,key4,key5,key6]
+    
+
+#Water
+
+
+#nuclear waste
+waste1 = pygame.Rect()
+        
+nuc_list = [waste1]
+
 def collision_test(char_rect,wall_list):
     collisions = []
     for wall in wall_list:
