@@ -43,39 +43,50 @@ wall7 = pygame.Rect(1842,907,250,20-0)
 
 wall_list = [wall1, wall2, wall3, wall4, wall5, wall6, wall7]
 
+#key
+
+key_list = [key1,key2,key4,key5,key6]
+
+key1 = pygame.Rect(-238,560,50,0-50)
+key2 = pygame.Rect(-103,560,50,0-50)
+key3 = pygame.Rect(-362,560,50,0-50)
+key4 = pygame.Rect(1660,560,50,0-50)
+key5 = pygame.Rect(1700,560,50,0-50)
+key6 = pygame.Rect(2000,560,50,0-50)
+
 #inventory
 def grabbable():
-    key1
-    key2
-    key3
-    key4
-    key5
-    key6
+    
+    global key1, key2, key3, key4, key5, key6
+
+    key1 = pygame.Rect(-238,560,50,0-50)
+    key2 = pygame.Rect(-103,560,50,0-50)
+    key3 = pygame.Rect(-362,560,50,0-50)
+    key4 = pygame.Rect(1660,560,50,0-50)
+    key5 = pygame.Rect(1700,560,50,0-50)
+    key6 = pygame.Rect(2000,560,50,0-50)
+    return 
 
 def inventory():
     inventory_list = []
-    if char_rect.colliderect(grabbable):
+    if char_rect.colliderect(grabbable()):
         inventory_list.append()
 
-#keys
-#key1 = pygame.Rect()
-#key2 = pygame.Rect()
-#key3 = pygame.Rect()
-#key4 = pygame.Rect()
-#key5 = pygame.Rect()
-#key6 = pygame.Rect()
-    
-#def keys():
-    #key_list = [key1,key2,key4,key5,key6]
+#parts
+#part_list = [part1,part2,part3,part4,part5]        
     
 
 #Water
 
 
 #nuclear waste
-waste1 = pygame.Rect()
+#waste1 = pygame.Rect()
         
-nuc_list = [waste1]
+#nuc_list = [waste1]
+
+#timer
+        
+        
 
 def collision_test(char_rect,wall_list):
     collisions = []
@@ -255,6 +266,8 @@ while True:
         current_sprite = char_walk[image_index]
         for wall in wall_list:
             wall.y += moving_up-2
+        for key in key_list:
+            key.y += moving_up-2
         
     if keys[pygame.K_s]:
         screen.fill(pygame.Color("black"))
@@ -281,12 +294,13 @@ while True:
 
     for wall in wall_list:
         pygame.draw.rect(screen, color, wall)
-            
         
     pygame.draw.rect(screen,pygame.Color("purple"),rand_rect) 
     scaled_c_sprite = pygame.transform.scale_by(current_sprite, 3)
     screen.blit(scaled_c_sprite, (SCREEN_WIDTH/2,SCREEN_HEIGHT/2))
     #pygame.draw.rect(screen,pygame.Color("yellow"),wall)
     #pygame.draw.rect(screen,pygame.Color("blue"),char_rect)
+    for key in key_list
+        pygame.draw.rect(screen,pygame.Color("red"),key)
     pygame.display.update()
     clock.tick(120)
