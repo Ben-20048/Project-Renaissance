@@ -32,6 +32,59 @@ rand_rect = pygame.Rect(SCREEN_WIDTH/2,SCREEN_HEIGHT/2,50,50)
 
 char_rect = pygame.Rect(SCREEN_WIDTH/2+5,SCREEN_HEIGHT/2+7,50,50)
 
+#wall data
+wall1 = pygame.Rect(180,140,660,270-0)
+wall2 = pygame.Rect(1140,140,660,270-0)
+wall3 = pygame.Rect(245,1035,335,270-0)
+wall4 = pygame.Rect(1396,1035,335,270-0)
+wall5 = pygame.Rect(1075,1288,350,20-0)
+wall6 = pygame.Rect(2100,524, 80,400-0)
+wall7 = pygame.Rect(1842,907,250,20-0)
+
+wall_list = [wall1, wall2, wall3, wall4, wall5, wall6, wall7]
+
+def collision_test(char_rect,wall_list):
+    collisions = []
+    for wall in wall_list:
+        if char_rect.colliderect(wall):
+            collisions.append(wall)
+    return collisions
+ 
+def move(char_rect, wall_list):
+    
+    global moving_right, moving_left, moving_up, moving_down
+ 
+    collisions = collision_test(char_rect, wall_list)
+    
+    moving_right = -5
+    moving_left = 5
+    moving_up = 5
+    moving_down = -5
+
+    for wall in collisions:
+        
+        right = abs(char_rect.right - wall.left)
+        left = abs(char_rect.left - wall.right)
+        bottom = abs(char_rect.bottom - wall.top)
+        top = abs(char_rect.top - wall.bottom)
+        minimum = min(left, right, top, bottom)
+        if minimum == left:
+          print('collision left')
+          moving_left = 0
+          
+        elif minimum == right:
+          print('collision right')
+          moving_right = 0
+          
+        elif minimum == top:
+          print('collision top')
+          moving_up = 0
+          
+        elif minimum == bottom:
+          print('collision bottom')
+          moving_down = 0
+ 
+
 #animation stuff
 char_walk = [pygame.image.load("Assets/CharAnim/walk1.png"),
              pygame.image.load("Assets/CharAnim/walk2.png"),
@@ -54,19 +107,10 @@ pygame.time.set_timer(ANIMATION, 100)
 
 #when taking coords from image editor take away 408 from X value and 480 from Y to get game coords
 
-#wall data
-wall1 = pygame.Rect(180,140,660,270-0)
-wall2 = pygame.Rect(1140,140,660,270-0)
-wall3 = pygame.Rect(245, 1035, 335, 270-0)
-wall4 = pygame.Rect(1396,1035,335,270-0)
-wall5 = pygame.Rect(1075, 1288, 350, 20-0)
-
-wall_list = [wall1, wall2, wall3, wall4, wall5]
-
 color = pygame.Color("yellow")
 
 
-collision_detected = False
+#collision_detected = False
 
 while True:
     for event in pygame.event.get():
@@ -78,9 +122,8 @@ while True:
             print(move_x+1000)
             print(move_y+1100)
             #print("base run")
-    
+
         if event.type == ANIMATION:
-            #print ("anim")
             if moving_right == speed_down_right:
                 if image_index < len(char_walk)-1:
                     image_index += 1
@@ -98,14 +141,12 @@ while True:
             elif moving_down == speed_down_right:
                 if image_index < len(char_walk)-1:
                     image_index += 1
-                    #current_sprite = pygame.transform.flip(image_sprite[image_index], True, False)
                 else:
                     image_index = 0
 
             elif moving_up == speed_up_left:
                 if image_index < len(char_walk)-1:
                     image_index += 1
-                    #current_sprite = char_walk[image_index]
                 else:
                     image_index = 0
 
@@ -115,7 +156,7 @@ while True:
 
                 #keys = pygame.key.get_pressed()
 
-            #if (keys[pygame.K_w] or keys[pygame.K_s] or keys[pygame.K_a] or keys[pygame.K_d]) == False:
+                #if (keys[pygame.K_w] or keys[pygame.K_s] or keys[pygame.K_a] or keys[pygame.K_d]) == False:
                 #print("no keys")
                 #for i in range(len(char_idle)):
                     #if i == 1:
@@ -136,7 +177,7 @@ while True:
                     #current_sprite = char_idle[image_index]
                     #print("anim rest")
         
-                if image_index < len(char_idle)-1:
+                if image_index <= len(char_idle)-1:
                     current_sprite = char_idle[image_index]
                     #print("rest cycle")
                     image_index += 1
@@ -196,40 +237,13 @@ while True:
             
     #screen.Surface(char_idle,(move_x,move_y))
     
-    collision_detected = False
-
     for wall in wall_list:
-        if char_rect.colliderect(wall):
-            
-            collision_detected = True
-            
-            if char_rect.right - wall.left <= 20:
-                moving_right = 0
-                if char_rect.right - wall.left <= 10:
-                    moving_right = -5
+        wall = move(char_rect,wall_list)
 
-            elif char_rect.left - wall.right >= -20:
-                moving_left = 0
-                if char_rect.left - wall.right >= -10:
-                    moving_left = 5
-
-            elif char_rect.bottom - wall.top <= 20:
-                moving_down = 0
-                if char_rect.bottom - wall.top <= 10:
-                    moving_down = -5
-
-            elif char_rect.top - wall.bottom >= -20:
-                moving_up = 0
-                if char_rect.top - wall.bottom >= -10:
-                    moving_up = 5
-                    
-            break
-        
-        else:
-            moving_right = -5
-            moving_left = 5
-            moving_up = 5
-            moving_down = -5            
+                #moving_right = -5
+                #moving_left = 5
+                #moving_up = 5
+                #moving_down = -5            
 
     for wall in wall_list:
         pygame.draw.rect(screen, color, wall)
@@ -238,7 +252,7 @@ while True:
     pygame.draw.rect(screen,pygame.Color("purple"),rand_rect) 
     scaled_c_sprite = pygame.transform.scale_by(current_sprite, 3)
     screen.blit(scaled_c_sprite, (SCREEN_WIDTH/2,SCREEN_HEIGHT/2))
-    #pygame.draw.rect(screen,pygame.Color("yellow"),wall1)
-    pygame.draw.rect(screen,pygame.Color("blue"),char_rect)
+    #pygame.draw.rect(screen,pygame.Color("yellow"),wall)
+    #pygame.draw.rect(screen,pygame.Color("blue"),char_rect)
     pygame.display.update()
     clock.tick(120)
