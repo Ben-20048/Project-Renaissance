@@ -57,8 +57,8 @@ key_list = [key1,key2,key3,key4,key5,key6]
 part_door1 = pygame.Rect(914,-565,65,20-0)
 part_door4 = pygame.Rect(725,1928,65,20-0)
 
-door2 = pygame.Rect(303,810,20,65-0)
-door3 = pygame.Rect(1648,810,20,65-0)
+door3 = pygame.Rect(303,810,20,65-0)
+door2 = pygame.Rect(1648,810,20,65-0)
 door4 = pygame.Rect(815,1450,20,65-0)
 door5 = pygame.Rect(1135,1450,20,65-0)
 
@@ -70,7 +70,7 @@ empty_list = []
 
 def inventory():
     
-    global door_list, door2
+    global door_list, part_door1, part_door4, door2
 
     inventory_list = []
     for key in key_list:
@@ -81,20 +81,18 @@ def inventory():
         if char_rect.colliderect(parts):
             inventory_list.append(parts)
             part_list.remove(parts)
-        for doors in door_list:
-            if part1 in inventory_list:
-                print("door2 unlocked")
-                #empty_list.append(door2)
-                door_list.pop(3)
-            if 4 > len(part_list):
-                for doors in door_list:
-                    door_list.remove(door3)
-            if 3 > len(part_list):
-                for doors in door_list:
-                    door_list.remove(door4)
-            if 2 > len(part_list):
-                for doors in door_list:
-                    door_list.remove(door5)
+        if part1 in inventory_list:
+            door_list.pop(2)
+            break
+        if part2 in inventory_list:
+            door_list.pop(2)
+            break
+        if part3 in inventory_list:
+            door_list.pop(2)
+            break
+        if part4 in inventory_list:
+            door_list.pop(2)
+            break
                     
 #maybe try and use true/false statments in door stuff?
 
