@@ -44,36 +44,72 @@ wall7 = pygame.Rect(1842,907,250,20-0)
 wall_list = [wall1, wall2, wall3, wall4, wall5, wall6, wall7]
 
 #key
+key1 = pygame.Rect(-150,-480,50,50-0)
+key2 = pygame.Rect(91,-480,50,50-0)
+key3 = pygame.Rect(350,-480,50,50-0)
+key4 = pygame.Rect(1560,-480,50,50-0)
+key5 = pygame.Rect(1800,-480,50,50-0)
+key6 = pygame.Rect(2080,-480,50,50-0)
 
-key_list = [key1,key2,key4,key5,key6]
+key_list = [key1,key2,key3,key4,key5,key6]
 
-key1 = pygame.Rect(-238,560,50,0-50)
-key2 = pygame.Rect(-103,560,50,0-50)
-key3 = pygame.Rect(-362,560,50,0-50)
-key4 = pygame.Rect(1660,560,50,0-50)
-key5 = pygame.Rect(1700,560,50,0-50)
-key6 = pygame.Rect(2000,560,50,0-50)
+#doors
+part_door1 = pygame.Rect(914,-565,65,20-0)
+part_door4 = pygame.Rect(725,1928,65,20-0)
+
+door2 = pygame.Rect(303,810,20,65-0)
+door3 = pygame.Rect(1648,810,20,65-0)
+door4 = pygame.Rect(815,1450,20,65-0)
+door5 = pygame.Rect(1135,1450,20,65-0)
+
+door_list = [part_door1, part_door4, door2, door3, door4, door5]
+
+empty_list = []
 
 #inventory
-def grabbable():
-    
-    global key1, key2, key3, key4, key5, key6
-
-    key1 = pygame.Rect(-238,560,50,0-50)
-    key2 = pygame.Rect(-103,560,50,0-50)
-    key3 = pygame.Rect(-362,560,50,0-50)
-    key4 = pygame.Rect(1660,560,50,0-50)
-    key5 = pygame.Rect(1700,560,50,0-50)
-    key6 = pygame.Rect(2000,560,50,0-50)
-    return 
 
 def inventory():
+    
+    global door_list, door2
+
     inventory_list = []
-    if char_rect.colliderect(grabbable()):
-        inventory_list.append()
+    for key in key_list:
+        if char_rect.colliderect(key):
+            inventory_list.append(key)
+            key_list.remove(key)
+    for parts in part_list:
+        if char_rect.colliderect(parts):
+            inventory_list.append(parts)
+            part_list.remove(parts)
+        for doors in door_list:
+            if part1 in inventory_list:
+                print("door2 unlocked")
+                #empty_list.append(door2)
+                door_list.pop(3)
+            if 4 > len(part_list):
+                for doors in door_list:
+                    door_list.remove(door3)
+            if 3 > len(part_list):
+                for doors in door_list:
+                    door_list.remove(door4)
+            if 2 > len(part_list):
+                for doors in door_list:
+                    door_list.remove(door5)
+                    
+#maybe try and use true/false statments in door stuff?
+
+#reactor            
+
 
 #parts
-#part_list = [part1,part2,part3,part4,part5]        
+
+part1 = pygame.Rect(942,-825,50,50-0)
+part2 = pygame.Rect(2787,834,50,50-0)
+part3 = pygame.Rect(-858,450,50,50-0)
+part4 = pygame.Rect(740,1983,50,50-0)
+part5 = pygame.Rect(1420,2445,50,50-0)
+            
+part_list = [part1,part2,part3,part4,part5]        
     
 
 #Water
@@ -129,6 +165,18 @@ def move(char_rect, wall_list):
           print('collision bottom')
           moving_down = 0
  
+    #for key in key_list:
+        #if keys[pygame.K_d]:
+            #key.x += moving_right
+
+        #if keys[pygame.K_a]:
+            #key.x += moving_left
+
+        #if keys[pygame.K_w]:
+            #key.y += moving_up
+
+        #if keys[pygame.K_s]:
+            #key.y += moving_down
 
 #animation stuff
 char_walk = [pygame.image.load("Assets/CharAnim/walk1.png"),
@@ -167,6 +215,7 @@ while True:
             print(move_x+1000)
             print(move_y+1100)
             #print("base run")
+            print(door_list)
 
         if event.type == ANIMATION:
             if moving_right == speed_down_right:
@@ -233,6 +282,9 @@ while True:
             else:
                 print("Error: char_idle list is empty")
 
+    if char_rect.colliderect:
+        inventory()
+
     keys = pygame.key.get_pressed()
 
     #print(keys[pygame.K_d])
@@ -248,19 +300,31 @@ while True:
         current_sprite = char_walk[image_index]
         for wall in wall_list:
             wall.x += moving_right+2
+        for key in key_list:
+            key.x += moving_right+2
+        for parts in part_list:
+            parts.x += moving_right+2
+        for doors in door_list:
+            doors.x += moving_right+2
                 
     if keys[pygame.K_a]:
         screen.fill(pygame.Color("black"))
-        screen.blit(bg_surface,(move_x + 10,move_y))
+        screen.blit(bg_surface,(move_x+6,move_y))
         move_x += moving_left-2
         rand_rect.x += moving_left-2
         current_sprite = pygame.transform.flip(char_walk[image_index], True, False)
         for wall in wall_list:
             wall.x += moving_left-2
+        for key in key_list:
+            key.x += moving_left-2
+        for parts in part_list:
+            parts.x += moving_left-2
+        for doors in door_list:
+            doors.x += moving_left-2
         
     if keys[pygame.K_w]:
         screen.fill(pygame.Color("black"))
-        screen.blit(bg_surface,(move_x + 5,move_y + 5))
+        screen.blit(bg_surface,(move_x+3,move_y+3))
         move_y += moving_up-2
         rand_rect.y += moving_up-2
         current_sprite = char_walk[image_index]
@@ -268,16 +332,26 @@ while True:
             wall.y += moving_up-2
         for key in key_list:
             key.y += moving_up-2
+        for parts in part_list:
+            parts.y += moving_up-2
+        for doors in door_list:
+            doors.y += moving_up-2
         
     if keys[pygame.K_s]:
         screen.fill(pygame.Color("black"))
-        screen.blit(bg_surface,(move_x + 5,move_y - 5))
+        screen.blit(bg_surface,(move_x+3,move_y-3))
         move_y += moving_down+2
         rand_rect.y += moving_down+2
         current_sprite = pygame.transform.flip(char_walk[image_index], True, False)
         for wall in wall_list:
             wall.y += moving_down+2
-            
+        for key in key_list:
+            key.y += moving_down+2
+        for parts in part_list:
+            parts.y += moving_down+2
+        for doors in door_list:
+            doors.y += moving_down+2
+
     #if (keys[pygame.K_w] and keys[pygame.K_s] and keys[pygame.K_a] and keys[pygame.K_d]) == False:
         #print("no keys")
         #current_sprite = char_idle[image_index]
@@ -287,11 +361,6 @@ while True:
     for wall in wall_list:
         wall = move(char_rect,wall_list)
 
-                #moving_right = -5
-                #moving_left = 5
-                #moving_up = 5
-                #moving_down = -5            
-
     for wall in wall_list:
         pygame.draw.rect(screen, color, wall)
         
@@ -300,7 +369,11 @@ while True:
     screen.blit(scaled_c_sprite, (SCREEN_WIDTH/2,SCREEN_HEIGHT/2))
     #pygame.draw.rect(screen,pygame.Color("yellow"),wall)
     #pygame.draw.rect(screen,pygame.Color("blue"),char_rect)
-    for key in key_list
+    for key in key_list:
         pygame.draw.rect(screen,pygame.Color("red"),key)
+    for parts in part_list:
+        pygame.draw.rect(screen,pygame.Color("green"),parts)
+    for doors in door_list:
+        pygame.draw.rect(screen,pygame.Color("white"),doors)
     pygame.display.update()
     clock.tick(120)
