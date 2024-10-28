@@ -77,6 +77,9 @@ def inventory():
         if char_rect.colliderect(key):
             inventory_list.append(key)
             key_list.remove(key)
+        if key1 in inventory_list:
+            door_list.pop(0)
+            break
     for parts in part_list:
         if char_rect.colliderect(parts):
             inventory_list.append(parts)
@@ -114,13 +117,54 @@ part_list = [part1,part2,part3,part4,part5]
 
 
 #nuclear waste
-#waste1 = pygame.Rect()
+waste1 = pygame.Rect(4,420,95,403-0)
         
-#nuc_list = [waste1]
+nuc_list = [waste1]
 
 #timer
         
-        
+
+#game over
+
+restart = False
+
+game_state = True
+
+text_font = pygame.font.SysFont("Helvetica", 30)
+
+def draw_text(text, font, text_col, x, y):
+    img = font.render(text, True, text_col)
+    screen.blit(img, (x, y))
+
+def game_status():
+    
+    #if game_state == True:
+        #print("running")
+    if game_state == False:
+        print("game over")
+        screen.fill(pygame.Color("black"))
+        draw_text("Game Over", text_font, (255, 255, 255), 900, 150)
+        if keys[pygame.K_r]:
+            print("restart")
+            #restart = True
+            #move_x = -1000
+            #move_y = -1100
+            for wall in wall_list:
+                wall.x = move_x + 1000
+                wall.y = move_y + 1100
+            for key in key_list:
+                key.x = move_x + 1000
+                key.y = move_y + 1100
+            for parts in part_list:
+                parts.x = move_x + 1000
+                parts.y = move_y + 1100
+            for doors in door_list:
+                doors.x = move_x + 1000
+                doors.y = move_y + 1100
+            for waste in nuc_list:
+                waste.x = move_x + 1000
+                waste.y = move_y + 1100
+
 
 def collision_test(char_rect,wall_list):
     collisions = []
@@ -213,7 +257,7 @@ while True:
             print(move_x+1000)
             print(move_y+1100)
             #print("base run")
-            print(door_list)
+            #print(door_list)
 
         if event.type == ANIMATION:
             if moving_right == speed_down_right:
@@ -290,7 +334,7 @@ while True:
     #print(keys[pygame.K_s])
     #print(keys[pygame.K_a])
 
-    if keys[pygame.K_d]:
+    if keys[pygame.K_d] and game_state == True:
         screen.fill(pygame.Color("black"))
         screen.blit(bg_surface,(move_x,move_y))
         move_x += moving_right+2
@@ -304,8 +348,10 @@ while True:
             parts.x += moving_right+2
         for doors in door_list:
             doors.x += moving_right+2
+        for waste in nuc_list:
+            waste.x += moving_right+2
                 
-    if keys[pygame.K_a]:
+    if keys[pygame.K_a] and game_state == True:
         screen.fill(pygame.Color("black"))
         screen.blit(bg_surface,(move_x+6,move_y))
         move_x += moving_left-2
@@ -319,8 +365,10 @@ while True:
             parts.x += moving_left-2
         for doors in door_list:
             doors.x += moving_left-2
+        for waste in nuc_list:
+            waste.x += moving_left-2
         
-    if keys[pygame.K_w]:
+    if keys[pygame.K_w] and game_state == True:
         screen.fill(pygame.Color("black"))
         screen.blit(bg_surface,(move_x+3,move_y+3))
         move_y += moving_up-2
@@ -334,8 +382,10 @@ while True:
             parts.y += moving_up-2
         for doors in door_list:
             doors.y += moving_up-2
+        for waste in nuc_list:
+            waste.y += moving_up-2
         
-    if keys[pygame.K_s]:
+    if keys[pygame.K_s] and game_state == True:
         screen.fill(pygame.Color("black"))
         screen.blit(bg_surface,(move_x+3,move_y-3))
         move_y += moving_down+2
@@ -349,6 +399,18 @@ while True:
             parts.y += moving_down+2
         for doors in door_list:
             doors.y += moving_down+2
+        for waste in nuc_list:
+            waste.y += moving_down+2
+            
+    if keys[pygame.K_p] or char_rect.colliderect(waste1):
+        game_state = False
+        game_status()
+        #game_state = False
+        
+    print(game_state)
+
+    if restart == True:
+        game_state = True
 
     #if (keys[pygame.K_w] and keys[pygame.K_s] and keys[pygame.K_a] and keys[pygame.K_d]) == False:
         #print("no keys")
@@ -373,5 +435,7 @@ while True:
         pygame.draw.rect(screen,pygame.Color("green"),parts)
     for doors in door_list:
         pygame.draw.rect(screen,pygame.Color("white"),doors)
+    for waste in nuc_list:
+        pygame.draw.rect(screen,pygame.Color("orange"),waste)
     pygame.display.update()
     clock.tick(120)
