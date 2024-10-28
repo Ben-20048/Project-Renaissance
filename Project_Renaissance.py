@@ -43,6 +43,9 @@ wall7 = pygame.Rect(1842,907,250,20-0)
 
 wall_list = [wall1, wall2, wall3, wall4, wall5, wall6, wall7]
 
+wall_list2 = [wall1, wall2, wall3, wall4, wall5, wall6, wall7]
+
+
 #key
 key1 = pygame.Rect(-150,-480,50,50-0)
 key2 = pygame.Rect(91,-480,50,50-0)
@@ -115,6 +118,8 @@ part_list = [part1,part2,part3,part4,part5]
 
 #Water
 
+def water():
+    water = pygame.rect(815,500,50,50,50-0)
 
 #nuclear waste
 waste1 = pygame.Rect(4,420,95,403-0)
@@ -138,6 +143,18 @@ def draw_text(text, font, text_col, x, y):
 
 def game_status():
     
+    wall1 = pygame.Rect(180,140,660,270-0)
+    wall2 = pygame.Rect(1140,140,660,270-0)
+    wall3 = pygame.Rect(245,1035,335,270-0)
+    wall4 = pygame.Rect(1396,1035,335,270-0)
+    wall5 = pygame.Rect(1075,1288,350,20-0)
+    wall6 = pygame.Rect(2100,524, 80,400-0)
+    wall7 = pygame.Rect(1842,907,250,20-0)
+
+    wall_list = [wall1, wall2, wall3, wall4, wall5, wall6, wall7]
+
+    wall_list2 = [wall1, wall2, wall3, wall4, wall5, wall6, wall7]
+
     #if game_state == True:
         #print("running")
     if game_state == False:
@@ -146,12 +163,14 @@ def game_status():
         draw_text("Game Over", text_font, (255, 255, 255), 900, 150)
         if keys[pygame.K_r]:
             print("restart")
-            #restart = True
+            restart = True
             #move_x = -1000
             #move_y = -1100
-            for wall in wall_list:
-                wall.x = move_x + 1000
-                wall.y = move_y + 1100
+            print(wall_list)
+            #wall_list.clear()
+            #wall_list = wall_list2
+            #wall_list.append(wall_list2)
+            print(wall_list)
             for key in key_list:
                 key.x = move_x + 1000
                 key.y = move_y + 1100
@@ -401,16 +420,7 @@ while True:
             doors.y += moving_down+2
         for waste in nuc_list:
             waste.y += moving_down+2
-            
-    if keys[pygame.K_p] or char_rect.colliderect(waste1):
-        game_state = False
-        game_status()
-        #game_state = False
-        
-    print(game_state)
 
-    if restart == True:
-        game_state = True
 
     #if (keys[pygame.K_w] and keys[pygame.K_s] and keys[pygame.K_a] and keys[pygame.K_d]) == False:
         #print("no keys")
@@ -437,5 +447,21 @@ while True:
         pygame.draw.rect(screen,pygame.Color("white"),doors)
     for waste in nuc_list:
         pygame.draw.rect(screen,pygame.Color("orange"),waste)
+        
+    if keys[pygame.K_p] or char_rect.colliderect(waste1):
+        game_state = False
+        game_status()
+        
+    print(restart)
+
+    if keys[pygame.K_r] and game_state == False:
+        game_state = True
+
+    if game_state == False:
+        wall_list.clear()
+        print(wall_list)
+        wall_list = wall_list2
+        print(wall_list)
+            
     pygame.display.update()
     clock.tick(120)
