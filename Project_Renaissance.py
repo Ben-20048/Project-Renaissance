@@ -16,9 +16,9 @@ bg_surface = pygame.transform.scale2x(bg_surface)
 #game variables
 move_x = -1000
 move_y = -1100
-move_x_pr = move_x
-move_y_pr = move_y
 
+counter_x = 0
+counter_y = 0
 
 moving_right = -5
 moving_left = 5
@@ -359,6 +359,7 @@ while True:
         move_x += moving_right+2
         rand_rect.x += moving_right+2
         current_sprite = char_walk[image_index]
+        counter_x += moving_right
         for wall in wall_list:
             wall.x += moving_right+2
         for key in key_list:
@@ -376,6 +377,7 @@ while True:
         move_x += moving_left-2
         rand_rect.x += moving_left-2
         current_sprite = pygame.transform.flip(char_walk[image_index], True, False)
+        counter_x += moving_left
         for wall in wall_list:
             wall.x += moving_left-2
         for key in key_list:
@@ -393,6 +395,7 @@ while True:
         move_y += moving_up-2
         rand_rect.y += moving_up-2
         current_sprite = char_walk[image_index]
+        counter_y += moving_up
         for wall in wall_list:
             wall.y += moving_up-2
         for key in key_list:
@@ -410,6 +413,7 @@ while True:
         move_y += moving_down+2
         rand_rect.y += moving_down+2
         current_sprite = pygame.transform.flip(char_walk[image_index], True, False)
+        counter_y += moving_down
         for wall in wall_list:
             wall.y += moving_down+2
         for key in key_list:
@@ -452,16 +456,32 @@ while True:
         game_state = False
         game_status()
         
-    print(restart)
+    #print(restart)
+    #print(wall_list)
+    #print(wall.x)
 
     if keys[pygame.K_r] and game_state == False:
         game_state = True
 
     if game_state == False:
-        wall_list.clear()
-        print(wall_list)
-        wall_list = wall_list2
-        print(wall_list)
-            
+        wall1.x = 180
+        wall1.y = 140
+        wall2.x = 1140
+        wall2.y = 140
+        wall3.x = 245
+        wall3.y = 1035
+        wall4.x = 1396
+        wall4.y = 1035
+        wall5.x = 1075
+        wall5.y = 1288
+        wall6.x = 2100
+        wall6.y = 524
+        wall7.x = 1842
+        wall7.y = 907
+        
+        move_x = -1000
+        move_y = -1100
+
+        
     pygame.display.update()
     clock.tick(120)
