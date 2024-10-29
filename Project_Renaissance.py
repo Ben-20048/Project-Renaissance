@@ -1,5 +1,7 @@
 from operator import index
 import pygame, sys
+
+from pygame.sprite import collide_rect
 #from pygame.locals import *
 
 
@@ -118,8 +120,25 @@ part_list = [part1,part2,part3,part4,part5]
 
 #Water
 
+collision_start_time = None
+
+water_machine = pygame.Rect(260,1380,167,650-0)
+
 def water():
-    water = pygame.rect(815,500,50,50,50-0)
+    water_rect = pygame.Rect(815,500,50,50-0)
+    goal_area = pygame.Rect(815,500,20,20-0)
+    pygame.draw.rect(screen,pygame.Color("blue"),water_rect)
+    pygame.draw.rect(screen,pygame.Color("green"),goal_area)
+    gravity = -2
+    water_rect.y += gravity
+    #if water_rect.bottom < 750:
+        #gravity = 0
+    if keys[pygame.K_SPACE]:
+        gravity += 1
+    if water_rect.colliderect(goal_area):
+        collision_start_time = pygame.time.get_ticks()
+        if water_rect.colliderect(goal_area) and pygame.time.get_ticks() - collision_start_time >= 5000:
+            door_list.pop(0)
 
 #nuclear waste
 waste1 = pygame.Rect(4,420,95,403-0)
@@ -360,6 +379,7 @@ while True:
         rand_rect.x += moving_right+2
         current_sprite = char_walk[image_index]
         counter_x += moving_right
+        water_machine.x += moving_right+2
         for wall in wall_list:
             wall.x += moving_right+2
         for key in key_list:
@@ -378,6 +398,7 @@ while True:
         rand_rect.x += moving_left-2
         current_sprite = pygame.transform.flip(char_walk[image_index], True, False)
         counter_x += moving_left
+        water_machine.x += moving_left-2
         for wall in wall_list:
             wall.x += moving_left-2
         for key in key_list:
@@ -396,6 +417,7 @@ while True:
         rand_rect.y += moving_up-2
         current_sprite = char_walk[image_index]
         counter_y += moving_up
+        water_machine.y += moving_up-2
         for wall in wall_list:
             wall.y += moving_up-2
         for key in key_list:
@@ -414,6 +436,7 @@ while True:
         rand_rect.y += moving_down+2
         current_sprite = pygame.transform.flip(char_walk[image_index], True, False)
         counter_y += moving_down
+        water_machine.y += moving_down+2
         for wall in wall_list:
             wall.y += moving_down+2
         for key in key_list:
@@ -443,6 +466,7 @@ while True:
     screen.blit(scaled_c_sprite, (SCREEN_WIDTH/2,SCREEN_HEIGHT/2))
     #pygame.draw.rect(screen,pygame.Color("yellow"),wall)
     #pygame.draw.rect(screen,pygame.Color("blue"),char_rect)
+    pygame.draw.rect(screen,pygame.Color("pink"),water_machine)
     for key in key_list:
         pygame.draw.rect(screen,pygame.Color("red"),key)
     for parts in part_list:
@@ -451,6 +475,7 @@ while True:
         pygame.draw.rect(screen,pygame.Color("white"),doors)
     for waste in nuc_list:
         pygame.draw.rect(screen,pygame.Color("orange"),waste)
+   
         
     if keys[pygame.K_p] or char_rect.colliderect(waste1):
         game_state = False
@@ -481,6 +506,9 @@ while True:
         
         move_x = -1000
         move_y = -1100
+        
+    if char_rect.colliderect(water_machine):
+        water()
 
         
     pygame.display.update()
