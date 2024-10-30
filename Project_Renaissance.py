@@ -123,18 +123,30 @@ part_list = [part1,part2,part3,part4,part5]
 collision_start_time = None
 
 water_machine = pygame.Rect(260,1380,167,650-0)
+water_rect = pygame.Rect(815,500,50,50-0)
 
-def water():
-    water_rect = pygame.Rect(815,500,50,50-0)
+gravity = 0.5
+
+def water(water_rect, gravity):
+    #water_rect = pygame.Rect(815,500,50,50-0)
     goal_area = pygame.Rect(815,500,20,20-0)
-    pygame.draw.rect(screen,pygame.Color("blue"),water_rect)
+    #pygame.draw.rect(screen,pygame.Color("blue"),water_rect)
     pygame.draw.rect(screen,pygame.Color("green"),goal_area)
-    gravity = -2
+    #gravity = 2
+    #for water_val in water_rect:
+        #water_val.y -= gravity
     water_rect.y += gravity
-    #if water_rect.bottom < 750:
-        #gravity = 0
-    if keys[pygame.K_SPACE]:
-        gravity += 1
+    print(gravity)
+    #print(water_rect.y)
+    if water_rect.y < 150:
+        print("stop")
+        water_rect.y = 0
+    if event.type == pygame.KEYDOWN:
+        print("keydown")
+        if event.key == pygame.K_SPACE:
+            water_rect.y -= 2
+            print("jump")
+
     if water_rect.colliderect(goal_area):
         collision_start_time = pygame.time.get_ticks()
         if water_rect.colliderect(goal_area) and pygame.time.get_ticks() - collision_start_time >= 5000:
@@ -508,8 +520,13 @@ while True:
         move_y = -1100
         
     if char_rect.colliderect(water_machine):
-        water()
-
-        
+        water(water_rect,gravity)
+        pygame.draw.rect(screen,pygame.Color("blue"),water_rect)
+        if event.type == pygame.KEYDOWN:
+            print("keydown")
+            if event.key == pygame.K_SPACE:
+                water_rect.y -= 2
+                print("jump")
+    
     pygame.display.update()
     clock.tick(120)
