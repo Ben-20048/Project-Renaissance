@@ -373,6 +373,12 @@ while True:
                     image_index = 0
             else:
                 print("Error: char_idle list is empty")
+        
+        if event.type == pygame.KEYDOWN and char_rect.colliderect(water_machine):
+            print("keydown")
+            if event.key == pygame.K_SPACE  and char_rect.colliderect(water_machine):
+                water_rect.y -= water_rect.y + 0.1
+                print("jump")
 
     if char_rect.colliderect:
         inventory()
@@ -522,11 +528,6 @@ while True:
     if char_rect.colliderect(water_machine):
         water(water_rect,gravity)
         pygame.draw.rect(screen,pygame.Color("blue"),water_rect)
-        if event.type == pygame.KEYDOWN:
-            print("keydown")
-            if event.key == pygame.K_SPACE:
-                water_rect.y -= 2
-                print("jump")
     
     pygame.display.update()
     clock.tick(120)
