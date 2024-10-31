@@ -138,17 +138,17 @@ def water(water_rect, gravity):
     water_rect.y += gravity
     print(gravity)
     #print(water_rect.y)
-    if water_rect.y < 150:
+    if water_rect.y < 650:
         print("stop")
         water_rect.y = 0
-    if event.type == pygame.KEYDOWN:
-        print("keydown")
-        if event.key == pygame.K_SPACE:
-            water_rect.y -= 2
-            print("jump")
-
+    
+        haswatercoloccur = False
     if water_rect.colliderect(goal_area):
-        collision_start_time = pygame.time.get_ticks()
+        haswatercoloccur = True
+        if haswatercoloccur:
+            collision_start_time = pygame.time.get_ticks()
+            
+        print(collision_start_time)
         if water_rect.colliderect(goal_area) and pygame.time.get_ticks() - collision_start_time >= 5000:
             door_list.pop(0)
 
@@ -269,7 +269,7 @@ def move(char_rect, wall_list):
 
         #if keys[pygame.K_s]:
             #key.y += moving_down
-
+water_col_occur = False
 #animation stuff
 char_walk = [pygame.image.load("Assets/CharAnim/walk1.png"),
              pygame.image.load("Assets/CharAnim/walk2.png"),
@@ -376,8 +376,9 @@ while True:
         
         if event.type == pygame.KEYDOWN and char_rect.colliderect(water_machine):
             print("keydown")
-            if event.key == pygame.K_SPACE  and char_rect.colliderect(water_machine):
-                water_rect.y -= water_rect.y + 0.1
+            if event.key == pygame.K_SPACE:  #and char_rect.colliderect(water_machine):
+                water_rect.y -= 50
+                
                 print("jump")
 
     if char_rect.colliderect:
@@ -466,6 +467,9 @@ while True:
         for waste in nuc_list:
             waste.y += moving_down+2
 
+    if (keys[pygame.K_w] or keys[pygame.K_s] or keys[pygame.K_a] or keys[pygame.K_d]) == False:
+        screen.fill(pygame.Color("black"))
+        screen.blit(bg_surface,(move_x,move_y))
 
     #if (keys[pygame.K_w] and keys[pygame.K_s] and keys[pygame.K_a] and keys[pygame.K_d]) == False:
         #print("no keys")
@@ -524,10 +528,15 @@ while True:
         
         move_x = -1000
         move_y = -1100
-        
+            
     if char_rect.colliderect(water_machine):
+        water_col_occur = True
+        
+        
+    if water_col_occur:
         water(water_rect,gravity)
         pygame.draw.rect(screen,pygame.Color("blue"),water_rect)
+        #pygame.draw.rect(screen,water_rect)
     
     pygame.display.update()
     clock.tick(120)
