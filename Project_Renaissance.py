@@ -16,7 +16,6 @@ clock = pygame.time.Clock()
 #background image
 bg_surface = pygame.image.load('Assets/Nuclear_reactor_meltdown_map_lighton.png').convert()
 bg_surface = pygame.transform.scale2x(bg_surface)
-#bg_surface = pygame.transform.scale_by(bg_surface, 0.333)
 
 #game variables
 
@@ -34,12 +33,10 @@ moving_down = -5
 speed_down_right = -5
 speed_up_left = 5
 
-#rand_rect = pygame.Rect(SCREEN_WIDTH/2,SCREEN_HEIGHT/2,50,50)
-
 'character rect'
 char_rect = pygame.Rect(SCREEN_WIDTH/2+10,SCREEN_HEIGHT/2+13,35,40)
 
-#wall data/door data
+#wall data/door data. Coordinates of all objects in map
 part_door1 = pygame.Rect(914,-565,130,20-0)
 part_door4 = pygame.Rect(725,1928,65,20-0)
 
@@ -145,7 +142,7 @@ wall5_l4 = pygame.Rect(691,1932,20,125-0)
 wall1_l5 = pygame.Rect(1714,1306,20,1420-0)
 wall2_l5 = pygame.Rect(1139,1606,20,1150-0)
 
-#wall lists
+#wall lists. A list containing all collidable objects
 wall_list = [part_door1, part_door4, door2, door3, door4, door5,
              wall1_h,wall2_h,wall3_h,wall4_h,wall5_h,wall8_h,wall9_h,wall10_h,wall11_h,wall12_h,wall13_h,wall14_h,wall15_h,wall16_h,wall17_h,wall18_h,
              wall13,wall14,wall15,wall16,wall17,wall18,wall19,wall20,wall21,wall22,wall23,wall24,wall25,wall26,wall27,wall28,wall29,wall30,wall31,wall32,wall33,wall34,wall35,wall36,wall37,wall38,wall39,
@@ -154,6 +151,7 @@ wall_list = [part_door1, part_door4, door2, door3, door4, door5,
              wall1_l4,wall2_l4,wall3_l4,wall4_l4,wall5_l4,
              wall1_l5,wall2_l5]
 
+#secondary wall list identical to the first. This exists to re-add all the objects to the first wall list upon restart
 wall_list2 = [part_door1, part_door4, door2, door3, door4, door5,
              wall1_h,wall2_h,wall3_h,wall4_h,wall5_h,wall8_h,wall9_h,wall10_h,wall11_h,wall12_h,wall13_h,wall14_h,wall15_h,wall16_h,wall17_h,wall18_h,
              wall13,wall14,wall15,wall16,wall17,wall18,wall19,wall20,wall21,wall22,wall23,wall24,wall25,wall26,wall27,wall28,wall29,wall30,wall31,wall32,wall33,wall34,wall35,wall36,wall37,wall38,wall39,
@@ -163,7 +161,7 @@ wall_list2 = [part_door1, part_door4, door2, door3, door4, door5,
              wall1_l5,wall2_l5]
 
 
-#key
+#key object coordinates
 key1 = pygame.Rect(-150,-480,50,50-0)
 key2 = pygame.Rect(91,-480,50,50-0)
 key3 = pygame.Rect(350,-480,50,50-0)
@@ -171,6 +169,7 @@ key4 = pygame.Rect(1560,-480,50,50-0)
 key5 = pygame.Rect(1800,-480,50,50-0)
 key6 = pygame.Rect(2080,-480,50,50-0)
 
+#Key lists
 key_list = [key1,key2,key3,key4,key5,key6]
 
 key_list2 = [key1,key2,key3,key4,key5,key6]
@@ -179,9 +178,12 @@ key_list2 = [key1,key2,key3,key4,key5,key6]
 
 def inventory():
 
-    global door_list, part_door1, part_door4, door2, inventory_list
+    global door_list, part_door1, part_door4, door2, inventory_list #makes these variables global across code. Now when I reference the variables that are in the function in main loop they are recognised
 
+    #inventory list. Stores values of collected objects
     inventory_list = []
+    
+    #if player collides with a key it is added to inventory. If the correct key is collected then a door is unlocked
     for key in key_list:
         if char_rect.colliderect(key):
             inventory_list.append(key)
@@ -189,6 +191,8 @@ def inventory():
         if key1 in inventory_list:
             wall_list.pop(0)
             break
+        
+    #progression code. If a part is collected, the next level is unlocked.
     for parts in part_list:
         if char_rect.colliderect(parts):
             inventory_list.append(parts)
@@ -206,6 +210,8 @@ def inventory():
             wall_list.pop(0)
             break
                     
+
+#when you aquire an item, the corrosponding item is set to true to cross off the item.
 check = False
 check1 = False
 check2 = False
@@ -223,8 +229,6 @@ check_dash5 = pygame.Rect(10,208,270,3-0)
 clipboard_bg = pygame.Rect(0,0,330,268-0)
 clipboard_border = pygame.Rect(0,0,300,238-0)
 
-#maybe try and use true/false statments in door stuff?
-
 #reactor            
 reactor = pygame.Rect(786,632,400,570-0)
 
@@ -240,7 +244,7 @@ part_list = [part1,part2,part3,part4,part5]
 
 part_list2 = [part1,part2,part3,part4,part5]        
 
-#Water
+#Water data
 
 collision_start_time = None
 
@@ -254,28 +258,28 @@ gravity = 0.3
 haswatercoloccur = False
 
 def water(water_rect, gravity):
-    #water_rect = pygame.Rect(815,500,50,50-0)
-    #pygame.draw.rect(screen,pygame.Color("blue"),water_rect)
     pygame.draw.rect(screen,pygame.Color("green"),goal_area)
     water_rect.y += gravity
     collision_start_time = pygame.time.get_ticks()
+    #if the water rect is at a certain Y level then it stops moving
     if water_rect.y > 700:
         water_rect.y = 700
     
         has_water_col_occur = False
     if water_rect.colliderect(goal_area):
         has_water_col_occur = True
+        #if haswatercoloccur is true then the timer starts
         if haswatercoloccur:
             collision_start_time = pygame.time.get_ticks()
-            
-        #print(collision_start_time)
+
+        #if water has collided with goal area and has done so for the set amount of time then door is unlocked
         if water_rect.colliderect(goal_area) and pygame.time.get_ticks() - collision_start_time >= 1000:
             door_list.pop(0)
-            print("time complete")
 
 #nuclear waste
 run = False
             
+#nuclear waste coordinates
 waste0 = pygame.Rect(1150,2634,700, 10-0)            
 waste1 = pygame.Rect(10,420,95,403-0)
 waste2 = pygame.Rect(-762,415,780,70-0)
@@ -308,12 +312,14 @@ restart = False
 
 game_state = True
 
-text_font = pygame.font.SysFont("Helvetica", 30)
+text_font = pygame.font.SysFont("Helvetica", 30) #setting text font
 
+#function that draws text
 def draw_text(text, font, text_col, x, y):
     img = font.render(text, True, text_col)
     screen.blit(img, (x, y))
 
+#function that handles game reseting
 def game_status():
 
     if game_state == False:
@@ -325,7 +331,7 @@ def game_status():
             print("restart")
             restart = True
 
-
+#collision checking function
 def collision_test(char_rect,wall_list):
     collisions = []
     for wall in wall_list:
@@ -333,6 +339,7 @@ def collision_test(char_rect,wall_list):
             collisions.append(wall)
     return collisions
  
+#function that handles movement values
 def move(char_rect, wall_list):
     
     global moving_right, moving_left, moving_up, moving_down
@@ -368,7 +375,8 @@ def move(char_rect, wall_list):
           moving_down = 0
  
 water_col_occur = False
-#animation stuff
+
+#list of images for character sprite
 char_walk = [pygame.image.load("Assets/CharAnim/walk1.png"),
              pygame.image.load("Assets/CharAnim/walk2.png"),
              pygame.image.load("Assets/CharAnim/walk3.png"),
@@ -382,16 +390,15 @@ char_idle = [pygame.image.load("Assets/CharAnim/Idle/idle1.png"),
              pygame.image.load("Assets/CharAnim/Idle/idle4.png")]
 
 image_index = 0
-current_sprite = char_idle[image_index]
+current_sprite = char_idle[image_index] #sets current sprite to idle by default
 
 ANIMATION = pygame.USEREVENT
 
-pygame.time.set_timer(ANIMATION, 100)
-
-#when taking coords from image editor take away 408 from X value and 480 from Y to get game coords
+pygame.time.set_timer(ANIMATION, 100) #animation clock
 
 color = pygame.Color("yellow")
 
+#game loop
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -407,9 +414,9 @@ while True:
         if event.type == ANIMATION:
             if moving_right == speed_down_right:
                 if image_index < len(char_walk)-1:
-                    image_index += 1
+                    image_index += 1 #cycles through image index
                 else:
-                    image_index = 0
+                    image_index = 0 #resets image index
 
             elif moving_left == speed_up_left:
                 if image_index < len(char_walk)-1:
@@ -432,11 +439,8 @@ while True:
             if (keys[pygame.K_w] or keys[pygame.K_s] or keys[pygame.K_a] or keys[pygame.K_d]) == False:
                 if image_index <= len(char_idle)-1:
                     current_sprite = char_idle[image_index]
-                    #print("rest cycle")
                     image_index += 1
-                    #print(image_index)
                 else:
-                    #print("reset idle")
                     image_index = 0
             else:
                 print("Error: char_idle list is empty")
@@ -446,16 +450,16 @@ while True:
                 water_rect.y -= 25
 
     if char_rect.colliderect:
-        inventory()
+        inventory() #everytime a collision occurs the inventory function is ran
 
     keys = pygame.key.get_pressed()
 
     #movement
     if keys[pygame.K_d] and game_state == True:
-        screen.fill(pygame.Color("black"))
-        screen.blit(bg_surface,(move_x,move_y))
-        move_x += moving_right+2
-        current_sprite = char_walk[image_index]
+        screen.fill(pygame.Color("black")) #fills previously blitted background with black, to save on performance
+        screen.blit(bg_surface,(move_x,move_y)) #blits the background surface on screen and moves it to the offset of move_x and move_y
+        move_x += moving_right+2 #the offset values for the map have the moving value added to them to provide illusion of moving
+        current_sprite = char_walk[image_index] #changes current sprite to the walk cycle
         water_machine.x += moving_right+2
         reactor.x += moving_right+2
         for wall in wall_list:
@@ -515,6 +519,7 @@ while True:
         for waste in nuc_list:
             waste.y += moving_down+2
 
+    #if no keys are being pressed then this continues to blit the background
     if (keys[pygame.K_w] or keys[pygame.K_s] or keys[pygame.K_a] or keys[pygame.K_d]) == False:
         screen.fill(pygame.Color("black"))
         screen.blit(bg_surface,(move_x+3,move_y))
@@ -578,17 +583,18 @@ while True:
         
         
     if part5 in inventory_list:
-        #waste0 = pygame.Rect(1150,2634,700, 10-0)
         run = True
     
     if run == True:
-        waste0.y -= 2.1
-        waste0.height += 2.1
+        waste0.y -= 2.1 #speed of acid chasing you in level 5
+        waste0.height += 2.1 #speed of acid chasing you in level 5
         draw_text("RUN!!!", text_font, (255, 255, 255), 900, 150)
         pygame.draw.rect(screen,pygame.Color("green"),waste0)
 
     pygame.draw.rect(screen,pygame.Color("black"),clipboard_bg)
     pygame.draw.rect(screen,pygame.Color("grey"),clipboard_border)
+
+    draw_text("character sprite by DANI MACCARI", text_font, (255, 255, 255), 1450, 970)
 
     draw_text("Checklist:", text_font, (255, 255, 255), 10, 10)
     draw_text("key to part1 room", text_font, (255, 255, 255), 10, 40)
@@ -599,10 +605,10 @@ while True:
     draw_text("part5", text_font, (255, 255, 255), 10, 190)
     
     #checklist. Checks if certain things are in inventory and marks them off list
-    if key1 in inventory_list:
+    if key1 in inventory_list: #checks if key is in inventory
         check = True
     if check == True:
-        pygame.draw.rect(screen,pygame.Color("white"),check_dash)
+        pygame.draw.rect(screen,pygame.Color("white"),check_dash) #draws dash over words on checklist to communicate to player they have collected item
         
     if part1 in inventory_list:
         check1 = True
